@@ -119,7 +119,7 @@ if True: # Copy local py files to repository directory
 if True: # Create new branch with updated py files and commit/push to repo
     send_commands = [
     f'(cd {repo_name}/py_files && command git checkout -b {new_branch})',
-    f'(cd {repo_name}/py_files && git add -f *',
+    f'(cd {repo_name}/py_files && git add -f *)',
     f'(cd {repo_name}/py_files && git commit -m "py add {date_format}")', 
     f'(cd {repo_name}/py_files && git push https://{scm_un}:{scm_pwd}@{repo_url} --all)',
     f'(cd {repo_name}/py_files && git checkout master)'
