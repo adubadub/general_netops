@@ -1,0 +1,10 @@
+{
+    "BS_UN":                "+BACKUP SERVER USERNAME HERE+",
+    "BS_PWD":               "+BACKUP SERVER PASSWORD HERE+",
+    "SCM_URL":              "+GIT SOURCE API URL HERE+",
+    "SCM_UN":               "+GIT SOURCE UN HERE+",
+    "SCM_PWD":              "+GIT SOURCE PWD HERE+",
+    "SCM_EMAIL":            "+GIT SOURCE EMAIL ADDR HERE+",
+    "REPO_URL":             "+GIT REPO URL HERE+",
+    "REPO_NAME":            "+GIT REPO NAME HERE+"
+}
