@@ -5,12 +5,25 @@ if True: # Imports
     import json
     import time
     import paramiko
+    from datetime import date
+    from datetime import datetime
+    from dateutil import parser
 if True: # JSON variables
     with open('get-build-logs.json') as f:
         js = json.load(f)
         jenkins_ip              = js['JENKINS_IP']
         jenkins_un              = js['NETSVC_UN']
         jenkins_pwd             = js['NETSVC_PWD']
+if True: # Define NormDate function (normalizes date information)
+    def NormDate(n):
+        normalized_date = parser.parse(n)
+        yr = int(normalized_date.strftime("%Y"))
+        mo = int(normalized_date.strftime("%m"))
+        d = int(normalized_date.strftime("%d"))
+        hr = int(normalized_date.strftime("%H"))
+        mt = int(normalized_date.strftime("%M"))
+        normalized_date = f'{yr}{mo}{d}.{hr}{mt}'
+        return normalized_date
 if True: # Define Connect function (Paramiko shell)
     def Connect(addr, un, pwd, command):
         client = paramiko.SSHClient()
@@ -91,8 +104,27 @@ if True: # Get build numbers
         job_build_dict[key] = b_list
 if True: # Create build subdirectories, get build log and write to local file
     for key in job_build_dict:
+        cmd = f"cd /var/lib/jenkins/jobs/{key}/builds/ && ls -l"
+        times = Exec(jenkins_ip, jenkins_un, jenkins_pwd, cmd)
+        times_split = times.split()
+        build_times = {}
+        
+        for idx, val in enumerate(times_split):
+            if 'dr' in val:
+                now = datetime.now()
+                jb = times_split[idx + 8]
+                jb_time = times_split[idx + 5:idx + 8]
+                jb_date = f'{now.year} {" ".join(jb_time[0:2])}'
+                jb_hr = jb_time[2]
+                dt_date = datetime.strptime(jb_date, '%Y %b %d')
+                dt_time = datetime.strptime(jb_hr, '%H:%M')
+                dt_time = datetime.time(t)
+                dt = datetime.combine(dt_date, dt_time)
+                jb_datetime = NormDate(str(dt))
+                build_times[jb] = jb_datetime
+        
         for b in job_build_dict[key]:
-            command = subprocess.Popen(f'mkdir jenkins_builds/{key}/{b}/', stdout=subprocess.PIPE, shell=True)
+            command = subprocess.Popen(f'mkdir jenkins_builds/{key}/{b}_{build_times[b]}/', stdout=subprocess.PIPE, shell=True)
             run = command.communicate()
             cmd = f"cd /var/lib/jenkins/jobs/{key}/builds/{b}/ && command cat log"
             log = Exec(jenkins_ip, jenkins_un, jenkins_pwd, cmd)
@@ -102,7 +134,7 @@ if True: # Create build subdirectories, get build log and write to local file
                 for l in log_lines:
                     lf.write(f'{l}\n')
         
-        command = subprocess.Popen(f'mv log.txt jenkins_builds/{key}/{b}/log.txt', stdout=subprocess.PIPE, shell=True)
+        command = subprocess.Popen(f'mv log.txt jenkins_builds/{key}/{b}_{build_times[b]}/log.txt', stdout=subprocess.PIPE, shell=True)
         run = command.communicate()
 if True: # Close script
     sys.exit()
