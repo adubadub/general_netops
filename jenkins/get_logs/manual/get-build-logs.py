@@ -5,7 +5,6 @@ if True: # Imports
     import json
     import time
     import paramiko
-    from scp import SCPClient
 if True: # JSON variables
     with open('get-build-logs.json') as f:
         js = json.load(f)

@@ -1,0 +1,1 @@
+Script assumes Jenkins is built on Linux server
