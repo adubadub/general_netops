@@ -99,7 +99,7 @@ for k in new_builds:
 for k in to_log:
     try:
         build_dict = to_log[k]
-        command = f'echo "{build_dict[3]} EXECUTED_BUILD {k} #{build_dict[0]} BY {build_dict[1]} WAS {build_dict[2]}" >> /var/log/jenkins/jenkins_custom.log'
+        command = f'echo "{build_dict[3]} EXECUTED_BUILD {k} #{str(build_dict[0])} BY {build_dict[1]} WAS {build_dict[2]}" >> /var/log/jenkins/jenkins_custom.log'
         wr = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
         wr.communicate()
     except:
