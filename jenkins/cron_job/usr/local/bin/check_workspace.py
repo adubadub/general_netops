@@ -2,6 +2,7 @@
 import sys
 import subprocess
 import json
+from datetime import datetime
 
 job_output = subprocess.getoutput('cd /var/lib/jenkins/jobs/ && ls')
 job_split = job_output.split()
@@ -33,14 +34,13 @@ for j in job_list:
             build_nos.append(files_split[i + 8])
             job_dict_new[j] = build_nos
 
-new_builds = {}
 for k in job_dict_new:
     try:
         job_dict_last[k]
     except:
-        bno = [job_dict_new[k]]
-        job_dict_last[k] = bno
+        job_dict_last[k] = []
 
+new_builds = {}
 command = subprocess.Popen(f'echo > check_workspace.json', stdout=subprocess.PIPE, shell=True)
 command.communicate()
 with open('check_workspace.json', 'r+') as nf:
@@ -48,19 +48,21 @@ with open('check_workspace.json', 'r+') as nf:
         try:
             buildno = job_dict_new[k][-1]
             if buildno in job_dict_last[k]:
-                pass
+                continue
             else:
                 new_builds[k] = [buildno]
-                js['LAST_BUILDS'][k] = [buildno]
         except:
             pass
     
+        js['LAST_BUILDS'][k] = [buildno]
+
     json.dump(js, nf)
 
 to_log = {}
 for k in new_builds:
     to_log[k] = [new_builds[k]]
-    console = subprocess.getoutput(f'cd /var/lib/jenkins/jobs/{k}/builds/{new_builds[k]}/ && cat log')
+    build = new_builds[k][0]
+    console = subprocess.getoutput(f'cd /var/lib/jenkins/jobs/{k}/builds/{build}/ && cat log')
     console_split = console.splitlines()
 
     for l in console_split:
@@ -72,24 +74,27 @@ for k in new_builds:
                     to_log[k].append(str(l))
                 else:
                     to_log[k].append(str(l))
-            elif 'finished:' in l.lower():
+            if 'finished:' in l.lower():
                 to_log[k].append(l)
+            else:
+                continue
         except:
             to_log[k].append('unknown user')
-            to_log[k].append('unknown result')
+            to_log[k].append('Finished: Unknown')
 
 for k in new_builds:
     try:
         no = new_builds[k]
         build = no[-1]
         job_log = subprocess.getoutput(f'cd /var/log/jenkins/ && cat jenkins.log | grep Run#execute:.{k}.#{build}')
-        job_log_split = job_log.split()   
+        job_log_split = job_log.split() 
         job_date = job_log_split[0]
         job_time = job_log_split[1]
         d_time = f'{job_date} {job_time}'
-        to_log[k].append(d_time)
     except:
-        to_log[k].append('null')
+        d_time = datetime.now()
+    
+    to_log[k].append(d_time)
 
 for k in to_log:
     try:
@@ -98,9 +103,6 @@ for k in to_log:
         wr = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
         wr.communicate()
     except:
-        build_dict = to_log[k]
-        command = f'echo "unknown time EXECUTED_BUILD {k} #{build_dict[0]} BY unknown user WAS unknown result" >> /var/log/jenkins/jenkins_custom.log'
-        wr = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-        wr.communicate()
+        pass
 
 sys.exit()
