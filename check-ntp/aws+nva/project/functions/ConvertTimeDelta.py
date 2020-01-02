@@ -4,7 +4,6 @@ def ConvertTD(duration):
     total_seconds = days_to_seconds + seconds
     offset = []
     drift = []
-
     if total_seconds < 86399:
         if total_seconds < 59:
             if total_seconds > 2:

@@ -15,7 +15,6 @@ def StringtoDT(timestring):
     timestring_split = timestring.split()
     today = datetime.today().strftime('%a')
     new_timestring = []
-
     for i in timestring_split:
         try:
             if int(i) > 31:
@@ -46,7 +45,6 @@ def StringtoDT(timestring):
 
     if len(new_timestring) < 5:
         new_timestring.insert(0, today)
-
     new_timestring = ' '.join(new_timestring)
     dev_dt = 'Invalid datetime format'
 
@@ -57,7 +55,6 @@ def StringtoDT(timestring):
                 break
         except:
             continue
-        
     return dev_dt
 
 def DTtoString(dtime):

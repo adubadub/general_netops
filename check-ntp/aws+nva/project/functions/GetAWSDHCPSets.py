@@ -3,7 +3,6 @@ from functions.SProcess import Command
 def Get(vpc_name, aws_creds, info):
     dc_ips = []
     ntp_ips = []
-    
     vpc_verbose = Command(f'''aws ec2 describe-vpcs --profile {aws_creds} \
         --filters "Name=tag:Name,Values={vpc_name}"
         ''').strip().decode().split()

@@ -55,7 +55,6 @@ if True: # Code
                 dc_ntp_sets.append(f'{dc}: {dc_ntp[dc][0]}')
             
             dc_ntp_delta = GetDCNTPState.Delta(dc, dc_ntp[dc], svc_act_un, svc_act_pwd)
-
             if dc_ntp_delta != 'NA':
                 dc_ntp_status[dc], dc_ntp_drift[dc] = ConvertTimeDelta.ConvertTD(dc_ntp_delta)
             else:
@@ -81,10 +80,8 @@ if True: # Code
             fw_ntp[fw] = []
             command = 'show sys ntp'
             fw_ntp_verbose = SendCommands.Exec(fw, netadmin_un, netadmin_pwd, command)
-            
             if fw_ntp_verbose != 'NA':
                 fw_ntp_split = fw_ntp_verbose.splitlines()
-
                 for idx, val in enumerate(fw_ntp_split):
                     if 'set server' in val:
                         fw_ntp_server = val.split()
@@ -96,7 +93,6 @@ if True: # Code
                 fw_ntp_status_verbose = SendCommands.Exec(fw, netadmin_un, netadmin_pwd, command)
                 true_datetime = GetDCNTPState.Time(fw_ntp[fw], svc_act_un, svc_act_pwd)
                 fw_ntp_status_split = fw_ntp_status_verbose.splitlines()
-
                 for idx, val in enumerate(fw_ntp_status_split):
                     if 'time' in val:
                         fw_time = val.split()
@@ -133,10 +129,8 @@ if True: # Code
             lb_ntp[lb] = []
             command = 'show running-config sys ntp'
             lb_ntp_verbose = SendCommands.Exec(lb, svc_act_un, svc_act_pwd, command)
-            
             if lb_ntp_verbose != 'NA':
                 lb_ntp_split = lb_ntp_verbose.splitlines()
-
                 for idx, val in enumerate(lb_ntp_split):
                     if 'servers' in val:
                         lb_ntp_server = val.split()
@@ -154,7 +148,6 @@ if True: # Code
                 lb_ntp_status_verbose = SendCommands.Exec(lb, svc_act_un, svc_act_pwd, command)
                 true_datetime = GetDCNTPState.Time(lb_ntp[lb], svc_act_un, svc_act_pwd)
                 lb_ntp_status_split = lb_ntp_status_verbose.splitlines()
-
                 for idx, val in enumerate(lb_ntp_status_split):
                     if ':' in val and 'Sys' not in val:
                         lb_time = val

@@ -5,7 +5,6 @@ from functions.GetTimeDelta import GetTD
 def Time(servers, un, pwd):
     command = 'powershell.exe date'
     true_time = 'NA'
-
     for dc in servers:
         try:
             true_time = ExecCmd(dc, un, pwd, command)
@@ -24,7 +23,6 @@ def Settings(dc, un, pwd, info):
     ntp_servers = []
     ntp_configuration = []
     ntp_source = []
-
     if 'peers' in info.lower():
         command = 'w32tm /query /peers'        
         ntp_settings_verbose = ExecCmd(dc, un, pwd, command)
@@ -59,7 +57,6 @@ def Delta(dc, source_dc, un, pwd):
     dc_time = ExecCmd(dc, un, pwd, command)
     true_time = 'NA'
     loop = 0
-
     while loop < len(source_dc):
         for dc in source_dc:
             try:
