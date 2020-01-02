@@ -4,7 +4,7 @@ if True: # imports
     import sys
 if True: # function imports
     from functions import GetAWSDHCPSets
-    from functions import GetDCNTPState
+    from functions import GetDCNTP
     from functions import SendCommands
     from functions import ConvertTimeDelta
     from functions import FormatTime
@@ -47,14 +47,14 @@ if True: # Code
         dc_ntp_console_out = []
         dc_ntp_drifts = []
         for dc in vpc_dcs:
-            dc_ntp[dc] = GetDCNTPState.Settings(dc, svc_act_un, svc_act_pwd, 'peers')
+            dc_ntp[dc] = GetDCNTP.Settings(dc, svc_act_un, svc_act_pwd, 'peers')
             if 'Error:' in dc_ntp[dc]:
                 dc_ntp_sets.append(f'{dc}: {str(dc_ntp[dc])}')
             else:    
                 servers = ', '.join(v for v in dc_ntp[dc])
                 dc_ntp_sets.append(f'{dc}: {dc_ntp[dc][0]}')
             
-            dc_ntp_delta = GetDCNTPState.Delta(dc, dc_ntp[dc], svc_act_un, svc_act_pwd)
+            dc_ntp_delta = GetDCNTP.Delta(dc, dc_ntp[dc], svc_act_un, svc_act_pwd)
             if dc_ntp_delta != 'NA':
                 dc_ntp_status[dc], dc_ntp_drift[dc] = ConvertTimeDelta.ConvertTD(dc_ntp_delta)
             else:
@@ -91,7 +91,7 @@ if True: # Code
 
                 command = 'get sys status'
                 fw_ntp_status_verbose = SendCommands.Exec(fw, netadmin_un, netadmin_pwd, command)
-                true_datetime = GetDCNTPState.Time(fw_ntp[fw], svc_act_un, svc_act_pwd)
+                true_datetime = GetDCNTP.Time(fw_ntp[fw], svc_act_un, svc_act_pwd)
                 fw_ntp_status_split = fw_ntp_status_verbose.splitlines()
                 for idx, val in enumerate(fw_ntp_status_split):
                     if 'time' in val:
@@ -146,7 +146,7 @@ if True: # Code
 
                 command = 'show sys clock'
                 lb_ntp_status_verbose = SendCommands.Exec(lb, svc_act_un, svc_act_pwd, command)
-                true_datetime = GetDCNTPState.Time(lb_ntp[lb], svc_act_un, svc_act_pwd)
+                true_datetime = GetDCNTP.Time(lb_ntp[lb], svc_act_un, svc_act_pwd)
                 lb_ntp_status_split = lb_ntp_status_verbose.splitlines()
                 for idx, val in enumerate(lb_ntp_status_split):
                     if ':' in val and 'Sys' not in val:
