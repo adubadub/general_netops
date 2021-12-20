@@ -1,2 +1,0 @@
-# crontab -e
-*/2 * * * * root cd /usr/local/bin/ && python3 check_workspace.py

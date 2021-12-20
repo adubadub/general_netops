@@ -7,7 +7,7 @@ from datetime import datetime
 job_output = subprocess.getoutput('cd /var/lib/jenkins/jobs/ && ls')
 job_split = job_output.split()
 
-job_last = subprocess.getoutput('cat job_list.txt')
+job_last = subprocess.getoutput('cd /usr/local/bin/ && cat job_list.txt')
 job_last_split = job_last.splitlines()
 job_list = job_last_split
 
@@ -16,10 +16,10 @@ for j in job_split:
         pass
     else:
         job_list.append(j)
-        command = subprocess.Popen(f'echo {j} >> job_list.txt', stdout=subprocess.PIPE, shell=True)
+        command = subprocess.Popen(f'cd /usr/local/bin/ && echo {j} >> job_list.txt', stdout=subprocess.PIPE, shell=True)
         command.communicate()
 
-with open('check_workspace.json') as f:
+with open('/usr/local/bin/check_workspace.json') as f:
     js = json.load(f)
     job_dict_last = js['LAST_BUILDS']
 
@@ -41,9 +41,9 @@ for k in job_dict_new:
         job_dict_last[k] = []
 
 new_builds = {}
-command = subprocess.Popen(f'echo > check_workspace.json', stdout=subprocess.PIPE, shell=True)
+command = subprocess.Popen(f'cd /usr/local/bin/ && echo > check_workspace.json', stdout=subprocess.PIPE, shell=True)
 command.communicate()
-with open('check_workspace.json', 'r+') as nf:
+with open('/usr/local/bin/check_workspace.json', 'r+') as nf:
     for k in job_dict_new:
         try:
             buildno = job_dict_new[k][-1]
@@ -99,7 +99,7 @@ for k in new_builds:
 for k in to_log:
     try:
         build_dict = to_log[k]
-        command = f'echo "{build_dict[3]} EXECUTED_BUILD {k} #{build_dict[0]} BY {build_dict[1]} WAS {build_dict[2]}" >> /var/log/jenkins/jenkins_custom.log'
+        command = f'echo "{build_dict[3]} EXECUTED_BUILD {k} #{str(build_dict[0])} BY {build_dict[1]} WAS {build_dict[2]}" >> /var/log/jenkins/jenkins_custom.log'
         wr = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
         wr.communicate()
     except:

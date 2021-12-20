@@ -1,0 +1,8 @@
+{
+    "ENVIRONMENT": {
+        "PROD":                     ["+NTP SRC IP HERE+", "+NTP CLIENT DC 1 IP HERE+", "+NTP CLIENT DC 2 IP HERE+"],
+        "DR":                       ["+NTP SRC IP HERE+", "+NTP CLIENT DC 1 IP HERE+", "+NTP CLIENT DC 2 IP HERE+"]                        
+    },
+    "SVC_UN":                       "+DOMAIN SERVICE ACCT UN HERE+",
+    "SVC_PWD":                      "+DOMAIN SERVICE ACCT PWD HERE+"
+}

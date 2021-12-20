@@ -1,0 +1,29 @@
+{
+    "VPCS": {
+        "VPC1": {
+            "NAME":                 "+VPC NAME HERE+",   
+            "ACCT":                 "mgmt",   
+            "DCS":                  ["+DC1 IP HERE+", "+DC2 IP HERE+"],
+            "FWS":                  ["+FTG1 IP HERE+", "+FTG2 IP HERE+"],
+            "LBS":                  ["+F51 IP HERE+", "+F52 IP HERE+"]
+        },
+        "VPC2": {
+            "NAME":                 "+VPC NAME HERE+",   
+            "ACCT":                 "prod",   
+            "DCS":                  ["+DC1 IP HERE+", "+DC2 IP HERE+"],
+            "FWS":                  ["+FTG1 IP HERE+", "+FTG2 IP HERE+"],
+            "LBS":                  ["+F51 IP HERE+", "+F52 IP HERE+"]
+        },
+        "VPC3": {
+            "NAME":                 "+VPC NAME HERE+",   
+            "ACCT":                 "sandbox",   
+            "DCS":                  ["+DC1 IP HERE+", "+DC2 IP HERE+"],
+            "FWS":                  ["+FTG1 IP HERE+", "+FTG2 IP HERE+"],
+            "LBS":                  ["+F51 IP HERE+", "+F52 IP HERE+"]
+        }           
+    },
+    "SVC_UN":                       "+DOMAIN/NETWORK SERVICE ACCT UN HERE+",
+    "SVC_PWD":                      "+DOMAIN/NETWORK SERVICE ACCT PWD HERE+",
+    "NETADMIN_UN":                  "+NETWORK ADMIN UN HERE+",
+    "NETADMIN_PWD":                 "+NETWORK ADMIN PWD HERE+"
+}
